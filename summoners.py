@@ -1,7 +1,6 @@
 from opgg.opgg import OPGG
 from opgg.summoner import Summoner, Game 
 from opgg.league_stats import LeagueStats
-import pandas as pd
 from datetime import datetime
 
 CHAMPIONS_ID = {}
@@ -71,7 +70,3 @@ def get_all_summoners(summoners : dict):
             summoner_infos['recent_games'].append(game_info)
         all_summoners_infos.append(summoner_infos)
     return all_summoners_infos
-        
-if __name__ == "__main__":
-    df = pd.DataFrame(get_all_summoners())
-    df.to_csv('summoners_infos.csv', index=False)

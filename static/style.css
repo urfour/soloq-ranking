@@ -1,13 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e1e1e; /* Gris foncé */
+    background-color: #1e1e1e;
     margin: 0;
     padding: 0;
-    color: gray; /* Couleur du texte en gris clair */
+    color: gray;
 }
 
 h1 {
-    color: #f0f0f0; /* Couleur du texte en gris clair */
+    color: #f0f0f0;
     text-align: center;
     margin-top: 20px;
 }
@@ -20,7 +20,7 @@ ul {
 }
 
 li {
-    background-color: #2e2e2e; /* Gris plus clair */
+    background-color: #2e2e2e;
     margin: 10px 0;
     padding: 15px;
     border-radius: 5px;
@@ -52,7 +52,7 @@ li .info strong {
 
 li .info .details {
     font-size: 0.9em;
-    color: #ccc; /* Couleur du texte en gris clair */
+    color: #ccc;
 }
 
 .win {
