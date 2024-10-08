@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classement des Invocateurs</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Classement des Invocateurs</h1>
+        <ul class="list-unstyled">
+            {% for info in infos %}
+                <li class="media my-4 p-3 bg-white rounded shadow-sm">
+                    <img src="{{ info['image'] }}" class="mr-3 rounded-circle" alt="Profile Image" width="64" height="64">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">{{ info['name'] }} ({{ info['pseudo'] }})</h5>
+                        <p>
+                            {% if info['tier']|lower != 'unranked' %}
+                                <img src="https://opgg-static.akamaized.net/images/medals_new/{{ info['tier']|lower }}.png" class="tier-icon" alt="{{ info['tier'] }} Icon">
+                            {% endif %}
+                            {{ info['tier'] }} {{ info['division'] }} - {{ info['lp'] }} LP
+                        </p>
+                        <p>Parties jouées: {{ info['games_played'] }}</p>
+                        <p class="win">Victoires: {{ info['win'] }}</p>
+                        <p class="lose">Défaites: {{ info['lose'] }}</p>
+                        <p class="winrate {% if info['winrate'] > 50 %}high{% elif info['winrate'] < 50 %}low{% else %}medium{% endif %}">
+                            Taux de victoire: {{ info['winrate'] }}%
+                        </p>
+                        <p>Dernière mise à jour: {{ info['updated_at'].strftime('%d/%m/%Y %H:%M:%S') }}</p>
+                        <h4 class="mt-4">Dernières parties</h4>
+                        <div class="recent-games">
+                            {% for game in info['recent_games'] %}
+                                <div class="game-banner {% if game['result'] == 'Victoire' %}victory{% else %}defeat{% endif %}">
+                                    <div class="game-info">
+                                        <strong>{{ game['champion'] }}</strong><br>
+                                        {{ game['result'] }}<br>
+                                        K/D/A: {{ game['kills'] }}/{{ game['deaths'] }}/{{ game['assists'] }}<br>
+                                        Date: {{ game['date'].strftime('%d/%m/%Y %H:%M:%S') }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

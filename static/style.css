@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Gris foncé */
+    margin: 0;
+    padding: 0;
+    color: gray; /* Couleur du texte en gris clair */
+}
+
+h1 {
+    color: #f0f0f0; /* Couleur du texte en gris clair */
+    text-align: center;
+    margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+li {
+    background-color: #2e2e2e; /* Gris plus clair */
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+li img {
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+li .rank {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-right: 15px;
+}
+
+li .info {
+    flex-grow: 1;
+}
+
+li .info strong {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+li .info .details {
+    font-size: 0.9em;
+    color: #ccc; /* Couleur du texte en gris clair */
+}
+
+.win {
+    color: darkblue;
+}
+
+.lose {
+    color: red;
+}
+
+.winrate.high {
+    color: green;
+}
+
+.winrate.medium {
+    color: orange;
+}
+
+.winrate.low {
+    color: red;
+}
+
+.recent-games {
+    margin-top: 10px;
+}
+
+.game-banner {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    color: white;
+    font-size: 0.9em;
+}
+
+.game-banner.victory {
+    background-color: darkblue;
+}
+
+.game-banner.defeat {
+    background-color: red;
+}
+
+.game-info {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.game-info strong {
+    display: block;
+    font-size: 1em;
+    margin-bottom: 2px;
+}
+
+.tier-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
