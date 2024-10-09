@@ -1,50 +1,44 @@
-from opgg.opgg import OPGG
-from opgg.summoner import Summoner
-from opgg.league_stats import LeagueStats
-from datetime import datetime
-
-def int_to_roman(input):
-    int_roman = {
-        0: '0',
-        1: 'I',
-        2: 'II',
-        3: 'III',
-        4: 'IV'
-    }
-    return int_roman[input]
+import cassiopeia as cass
+from cassiopeia.data import Queue
+from cassiopeia.core import Account, ChampionMastery
+from merakicommons.container import SearchError
 
 def get_all_summoners(summoners : dict):
-    opgg = OPGG()
-    stat: LeagueStats
     all_summoners_infos = []
-    summoner: Summoner
     for name, summoner in summoners.items():
-        summoner = opgg.search(summoner, region='EUW')
+        account = Account(name=summoner.split('#')[0], tagline=summoner.split('#')[1], region='EUW')
+        summoner = account.summoner
         summoner_infos = {}
         summoner_infos['name'] = name
-        summoner_infos['pseudo'] = f'{summoner.game_name}#{summoner.tagline.upper()}'
-        summoner_infos['image'] = summoner.profile_image_url
-        for stat in summoner.league_stats:
-            if stat.queue_info.game_type == 'SOLORANKED':
-                summoner_infos['tier'] = stat.tier_info.tier
-                summoner_infos['division'] = int_to_roman(stat.tier_info.division)
-                summoner_infos['lp'] = stat.tier_info.lp
-                summoner_infos['games_played'] = stat.win + stat.lose
-                summoner_infos['win'] = stat.win
-                summoner_infos['lose'] = stat.lose
-                summoner_infos['winrate'] = stat.win_rate
-                if stat.updated_at:
-                    summoner_infos['updated_at'] = datetime.strptime(stat.updated_at, '%Y-%m-%dT%H:%M:%S%z')
-                else:
-                    summoner_infos['updated_at'] = datetime.now()
-                summoner_infos['most_played_champ'] = {}
-                if not summoner.most_champions:
-                    break
-                champ = summoner.most_champions[0]
-                summoner_infos['most_played_champ']['name'] = champ.champion.name
-                summoner_infos['most_played_champ']['image'] = champ.champion.image_url
-                summoner_infos['most_played_champ']['winrate'] = champ.win_rate
-                summoner_infos['most_played_champ']['games_played'] = champ.play
-                break
+        summoner_infos['pseudo'] = account.name_with_tagline
+        summoner_infos['image'] = summoner.profile_icon().url
+
+        entries = account.summoner.league_entries
+        try:
+            solo_ranked = entries.find(Queue.ranked_solo_fives)
+            summoner_infos['tier'] = solo_ranked.tier.value
+            summoner_infos['division'] = solo_ranked.division.value
+            summoner_infos['lp'] = solo_ranked.league_points
+            summoner_infos['games_played'] = solo_ranked.wins + solo_ranked.losses
+            summoner_infos['win'] = solo_ranked.wins
+            summoner_infos['lose'] = solo_ranked.losses
+            summoner_infos['winrate'] = round(solo_ranked.wins / (solo_ranked.wins + solo_ranked.losses) * 100, 2)
+            summoner_infos['most_played_champ'] = {}
+        except SearchError:
+            summoner_infos['tier'] = 'UNRANKED'
+            summoner_infos['division'] = '0'
+            summoner_infos['lp'] = 0
+            summoner_infos['games_played'] = 0
+            summoner_infos['win'] = 0
+            summoner_infos['lose'] = 0
+            summoner_infos['winrate'] = 0
+            summoner_infos['most_played_champ'] = {}
+        if not summoner.champion_masteries[0]:
+            break
+        champ: ChampionMastery
+        champ = summoner.champion_masteries[0]
+        summoner_infos['most_played_champ'] = {}
+        summoner_infos['most_played_champ']['name'] = champ.champion().name
+        summoner_infos['most_played_champ']['image'] = champ.champion().image().url
         all_summoners_infos.append(summoner_infos)
     return all_summoners_infos
