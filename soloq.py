@@ -7,7 +7,6 @@ import time
 
 app = Flask(__name__)
 cache = TTLCache(maxsize=100, ttl=600)
-infos = []
 
 REAL_SUMMONERS = {
     'Tom': 'Et Zééé Bardi#EUW',
@@ -28,12 +27,11 @@ def rank_to_value(tier, division, lp):
     return tier_value + division_value + lp / 100
 
 def update_summoners_info():
-    global infos
     if 'summoners_infos' in cache:
         return
     else:
         cache['summoners_infos'] = get_all_summoners(REAL_SUMMONERS)
-    infos.sort(key=lambda x: rank_to_value(x['tier'], x['division'], x['lp']), reverse=True)
+        cache['summoners_infos'].sort(key=lambda x: rank_to_value(x['tier'], x['division'], x['lp']), reverse=True)
     print(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] Updated summoners info')
 
 @app.route('/')
