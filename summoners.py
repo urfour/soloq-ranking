@@ -1,5 +1,5 @@
 from opgg.opgg import OPGG
-from opgg.summoner import Summoner, Game
+from opgg.summoner import Summoner
 from opgg.league_stats import LeagueStats
 from datetime import datetime
 
@@ -31,8 +31,7 @@ def get_all_summoners(summoners : dict):
     stat: LeagueStats
     all_summoners_infos = []
     summoner: Summoner
-    game: Game
-    reconstruct_champions_id
+    reconstruct_champions_id()
     for name, summoner in summoners.items():
         summoner = opgg.search(summoner, region='EUW')
         summoner_infos = {}

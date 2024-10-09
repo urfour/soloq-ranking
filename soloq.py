@@ -1,10 +1,12 @@
 from flask import Flask, render_template
+from flask_caching import Cache
 from summoners import get_all_summoners
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 import time
 
 app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 REAL_SUMMONERS = {
     'Tom': 'Et Zééé Bardi#EUW',
@@ -25,6 +27,7 @@ def rank_to_value(tier, division, lp):
     return tier_value + division_value + lp / 100
 
 infos = []
+@cache.cached(timeout=600)
 def update_summoners_info():
     global infos
     infos = get_all_summoners(REAL_SUMMONERS)
@@ -37,9 +40,9 @@ def index():
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=1)
+    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=20)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
