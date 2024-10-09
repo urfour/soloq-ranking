@@ -1,5 +1,8 @@
 from flask import Flask, render_template
+from os import getenv 
+from dotenv import load_dotenv
 from cachetools import TTLCache
+import cassiopeia as cass
 from summoners import get_all_summoners
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
@@ -9,13 +12,13 @@ app = Flask(__name__)
 cache = TTLCache(maxsize=100, ttl=600)
 
 REAL_SUMMONERS = {
-    'Tom': 'Et Zééé Bardi#EUW',
-    'Nassime': 'UrFour#suuuu',
-    'Alex': 'Kahlazar#EUW',
-    'Antoine': 'Big C le Cuisto#2715',
-    'Pipo': 'Pipo le cuisto#EUW',
     'Guilhem': 'Bousilleur2Fion#SCUL',
-    'Yann': 'Call me mummy#2811',
+    'Pipo': 'Destructeur2vulv#SCUL',
+    'Yann': 'chef dé kayoux#SCUL',
+    'Antoine': 'Malaxeur2Bzez#SCUL',
+    'Kahlabzez': 'Pourfendeur2Fiak#SCUL',
+    'Nassime': 'Extincteur2Teuch#SCUL',
+    'Loan': 'Enchaineur2Renoi#SCUL',
     'Zebi 2': 'EmpereurDesZebis#SCUL'
 }
 
@@ -39,6 +42,10 @@ def index():
     return render_template('index.html', infos=cache['summoners_infos'])
 
 if __name__ == '__main__':
+    load_dotenv()
+    RIOT_API_KEY = getenv('RIOT_API_KEY')
+    cass.set_riot_api_key(RIOT_API_KEY)
+    print('Using Riot API key:', RIOT_API_KEY)
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=20)
     scheduler.start()
