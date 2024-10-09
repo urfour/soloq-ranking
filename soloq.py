@@ -42,4 +42,4 @@ if __name__ == '__main__':
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(port=5000, debug=True)
+    app.run(debug=True)
