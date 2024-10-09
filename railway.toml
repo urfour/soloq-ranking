@@ -4,6 +4,4 @@ buildCommand = "pip install -r requirements.txt"
 
 [deploy]
 startCommand = "python soloq.py"
-healthcheckPath = "/"
-healthcheckTimeout = 100
 restartPolicyType = "never"
