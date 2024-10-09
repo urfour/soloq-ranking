@@ -1,13 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #1e1e1e;
+    background-color: #1e1e1e; /* Gris foncé */
     margin: 0;
     padding: 0;
-    color: gray;
+    color: #f0f0f0; /* Couleur du texte en gris clair */
 }
 
 h1 {
-    color: #f0f0f0;
+    color: #f0f0f0; /* Couleur du texte en gris clair */
     text-align: center;
     margin-top: 20px;
 }
@@ -20,7 +20,7 @@ ul {
 }
 
 li {
-    background-color: #2e2e2e;
+    background-color: #2e2e2e; /* Gris plus clair */
     margin: 10px 0;
     padding: 15px;
     border-radius: 5px;
@@ -35,9 +35,10 @@ li img {
 }
 
 li .rank {
-    font-size: 1.2em;
+    font-size: 1.5em;
     font-weight: bold;
     margin-right: 15px;
+    color: #f0f0f0;
 }
 
 li .info {
@@ -52,7 +53,7 @@ li .info strong {
 
 li .info .details {
     font-size: 0.9em;
-    color: #ccc;
+    color: #ccc; /* Couleur du texte en gris clair */
 }
 
 .win {
@@ -80,37 +81,131 @@ li .info .details {
 }
 
 .game-banner {
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
-    margin-bottom: 5px;
+    background-color: #2e2e2e;
     border-radius: 5px;
-    color: white;
-    font-size: 0.9em;
+    margin-bottom: 10px;
+    padding: 10px;
+    color: #f0f0f0;
 }
 
 .game-banner.victory {
-    background-color: darkblue;
+    border-left: 5px solid darkblue;
 }
 
 .game-banner.defeat {
-    background-color: red;
+    border-left: 5px solid red;
 }
 
-.game-info {
-    flex-grow: 1;
-    text-align: left;
+.inner {
+    display: flex;
+    flex-direction: column;
 }
 
-.game-info strong {
-    display: block;
-    font-size: 1em;
-    margin-bottom: 2px;
+.head-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
 }
 
-.tier-icon {
-    width: 24px;
-    height: 24px;
+.divider {
+    border-bottom: 1px solid #444;
+    margin: 5px 0;
+}
+
+.main {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+}
+
+.info .champion {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.info .champion img {
+    border-radius: 50%;
+}
+
+.kda-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kda {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.kda-ratio {
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.game-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.game-stats div {
+    margin-bottom: 5px;
+}
+
+.sub {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.items {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.items .item {
     margin-right: 5px;
-    vertical-align: middle;
+}
+
+.game-tags__scroll-container {
+    display: flex;
+    align-items: center;
+}
+
+.game-tags {
+    display: flex;
+}
+
+.OPScoreBadge {
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    color: #f0f0f0;
+    margin-right: 5px;
+    padding: 5px 10px;
+}
+
+.OPScoreBadge .badge {
+    font-size: 0.9em;
+}
+
+.most-played-champ {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.most-played-champ img {
+    margin-right: 10px;
+}
+
+.most-played-champ span {
+    margin-right: 10px;
 }

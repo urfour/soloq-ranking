@@ -1,5 +1,5 @@
 from opgg.opgg import OPGG
-from opgg.summoner import Summoner, Game 
+from opgg.summoner import Summoner, Game
 from opgg.league_stats import LeagueStats
 from datetime import datetime
 
@@ -52,21 +52,14 @@ def get_all_summoners(summoners : dict):
                     summoner_infos['updated_at'] = datetime.strptime(stat.updated_at, '%Y-%m-%dT%H:%M:%S%z')
                 else:
                     summoner_infos['updated_at'] = datetime.now()
-
-        summoner_infos['recent_games'] = []
-        for game in summoner.recent_game_stats[:3]:
-            for champ in opgg.all_champions:
-                if champ.id == game.myData.champion_id:
-                    champion = champ.name
+                summoner_infos['most_played_champ'] = {}
+                if not summoner.most_champions:
                     break
-            game_info = {
-                'champion': champion,
-                'result': 'Victoire' if game.myData.stats.result == 'WIN' else 'Défaite',
-                'kills': game.myData.stats.kill,
-                'deaths': game.myData.stats.death,
-                'assists': game.myData.stats.assist,
-                'date': datetime.strptime(game.created_at, '%Y-%m-%dT%H:%M:%S%z')
-            }
-            summoner_infos['recent_games'].append(game_info)
+                champ = summoner.most_champions[0]
+                summoner_infos['most_played_champ']['name'] = champ.champion.name
+                summoner_infos['most_played_champ']['image'] = champ.champion.image_url
+                summoner_infos['most_played_champ']['winrate'] = champ.win_rate
+                summoner_infos['most_played_champ']['games_played'] = champ.play
+                break
         all_summoners_infos.append(summoner_infos)
     return all_summoners_infos

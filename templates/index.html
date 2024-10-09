@@ -12,36 +12,44 @@
         <h1 class="text-center my-4">Classement des Invocateurs</h1>
         <ul class="list-unstyled">
             {% for info in infos %}
-                <li class="media my-4 p-3 bg-white rounded shadow-sm">
-                    <img src="{{ info['image'] }}" class="mr-3 rounded-circle" alt="Profile Image" width="64" height="64">
+                <li class="media my-4 p-3 bg-dark rounded shadow-sm">
+                    <span class="rank">{{ loop.index }}</span>
+                    <a href="https://www.op.gg/summoners/euw/{{ info['pseudo'].replace('#', '-') }}" target="_blank">
+                        <img src="{{ info['image'] }}" class="mr-3 rounded-circle" alt="Profile Image" width="64" height="64">
+                    </a>
                     <div class="media-body">
-                        <h5 class="mt-0 mb-1">{{ info['name'] }} ({{ info['pseudo'] }})</h5>
+                        <h5 class="mt-0 mb-1">
+                            <a href="https://www.op.gg/summoners/euw/{{ info['pseudo'].replace('#', '-') }}" target="_blank">
+                                {{ info['name'] }} ({{ info['pseudo'] }})
+                            </a>
+                        </h5>
                         <p>
                             {% if info['tier']|lower != 'unranked' %}
-                                <img src="https://opgg-static.akamaized.net/images/medals_new/{{ info['tier']|lower }}.png" class="tier-icon" alt="{{ info['tier'] }} Icon">
+                                <img src="https://opgg-static.akamaized.net/images/medals_new/{{ info['tier']|lower }}.png" class="tier-icon" alt="{{ info['tier'] }} Icon" width="64" height="64">
                             {% endif %}
                             {{ info['tier'] }} {{ info['division'] }} - {{ info['lp'] }} LP
                         </p>
-                        <p>Parties jouées: {{ info['games_played'] }}</p>
-                        <p class="win">Victoires: {{ info['win'] }}</p>
-                        <p class="lose">Défaites: {{ info['lose'] }}</p>
-                        <p class="winrate {% if info['winrate'] > 50 %}high{% elif info['winrate'] < 50 %}low{% else %}medium{% endif %}">
-                            Taux de victoire: {{ info['winrate'] }}%
+                        <p>Parties jouées : {{ info['games_played'] }}</p>
+                        <p class="win">Victoires : {{ info['win'] }}</p>
+                        <p class="lose">Défaites : {{ info['lose'] }}</p>
+                        <p>Taux de victoire : 
+                            {% if info['winrate'] > 50 %}
+                                <span class="winrate high">{{ info['winrate'] }}%</span>
+                            {% elif info['winrate'] < 50 %}
+                                <span class="winrate low">{{ info['winrate'] }}%</span>
+                            {% else %}
+                                <span class="winrate medium">{{ info['winrate'] }}%</span>
+                            {% endif %}
                         </p>
-                        <p>Dernière mise à jour: {{ info['updated_at'].strftime('%d/%m/%Y %H:%M:%S') }}</p>
-                        <h4 class="mt-4">Dernières parties</h4>
-                        <div class="recent-games">
-                            {% for game in info['recent_games'] %}
-                                <div class="game-banner {% if game['result'] == 'Victoire' %}victory{% else %}defeat{% endif %}">
-                                    <div class="game-info">
-                                        <strong>{{ game['champion'] }}</strong><br>
-                                        {{ game['result'] }}<br>
-                                        K/D/A: {{ game['kills'] }}/{{ game['deaths'] }}/{{ game['assists'] }}<br>
-                                        Date: {{ game['date'].strftime('%d/%m/%Y %H:%M:%S') }}
-                                    </div>
-                                </div>
-                            {% endfor %}
+                        <h6>Champion le plus joué :</h6>
+                        <div class="most-played-champ">
+                            <img src="{{ info['most_played_champ']['image'] }}" alt="{{ info['most_played_champ']['name'] }}" width="32" height="32">
+                            <span>{{ info['most_played_champ']['name'] }}</span>
+                            <span>Winrate: {{ info['most_played_champ']['winrate'] }}%</span>
+                            <span>Parties jouées: {{ info['most_played_champ']['games_played'] }}</span>
                         </div>
+                        <br>
+                        <p class="small"><em>Dernière mise à jour : {{ info['updated_at'].strftime('%d/%m/%Y %H:%M:%S') }}</em></p>
                     </div>
                 </li>
             {% endfor %}
