@@ -3,19 +3,6 @@ from opgg.summoner import Summoner
 from opgg.league_stats import LeagueStats
 from datetime import datetime
 
-CHAMPIONS_ID = {}
-
-def reconstruct_champions_id():
-    global CHAMPIONS_ID
-    if CHAMPIONS_ID:
-        return
-    opgg = OPGG()
-    champions = opgg.all_champions
-    champions_id = {}
-    for champ in champions:
-        champions_id[champ.name] = champ.id
-    CHAMPIONS_ID = champions_id
-
 def int_to_roman(input):
     int_roman = {
         0: '0',
@@ -31,7 +18,6 @@ def get_all_summoners(summoners : dict):
     stat: LeagueStats
     all_summoners_infos = []
     summoner: Summoner
-    reconstruct_champions_id()
     for name, summoner in summoners.items():
         summoner = opgg.search(summoner, region='EUW')
         summoner_infos = {}
