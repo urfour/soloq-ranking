@@ -13,10 +13,10 @@
                 <!-- Rang et Image -->
                 <div class="flex items-center w-full mb-2">
                     <span class="rank text-cyan-500 text-2xl font-semibold mr-2">{{ loop.index }}</span>
-                    <a href="https://www.op.gg/summoner/userName={{ info['pseudo'] }}" target="_blank">
+                    <a href="https://www.op.gg/summoners/euw/{{ info['pseudo'].replace('#', '-') }}" target="_blank">
                         <img src="{{ info['image'] }}" alt="Profile Image" class="rounded-full w-16 h-16 mr-2">
                     </a>
-                    <a href="https://www.op.gg/summoner/userName={{ info['pseudo'] }}" target="_blank">
+                    <a href="https://www.op.gg/summoners/euw/{{ info['pseudo'].replace('#', '-') }}" target="_blank">
                         <h5 class="text-xl text-blue-400 font-semibold">{{ info['name'] }} ({{ info['pseudo'] }})</h5>
                     </a>
                 </div>
@@ -28,20 +28,20 @@
                             <img src="https://opgg-static.akamaized.net/images/medals_new/{{ info['tier']|lower }}.png" class="tier-icon" alt="{{ info['tier'] }} Icon" width="64" height="64">
                             <p>{{ info['tier'] }} {{ info['division'] }} - {{ info['lp'] }} LP
                         </div>
+                        <p class="text-gray-400">Victoires : {{ info['win'] }} | Défaites : {{ info['lose'] }}</p>
+                        <p>Taux de victoire : 
+                            {% if info['winrate'] > 50 %}
+                                <span class="winrate text-green-500">{{ info['winrate'] }}%</span>
+                            {% elif info['winrate'] < 50 %}
+                                <span class="winrate text-red-500">{{ info['winrate'] }}%</span>
+                            {% else %}
+                                <span class="winrate text-yellow-500">{{ info['winrate'] }}%</span>
+                            {% endif %}
+                        </p>
                     {% else %}
                         <span class="tier-placeholder mr-2" width="64" height="64"></span>
-                        <p>Non classé</p><br>
+                        <p class="text-xl mb-12">Non classé</p><br>
                     {% endif %}
-                    <p class="text-gray-400">Victoires : {{ info['win'] }} | Défaites : {{ info['lose'] }}</p>
-                    <p>Taux de victoire : 
-                        {% if info['winrate'] > 50 %}
-                            <span class="winrate text-green-500">{{ info['winrate'] }}%</span>
-                        {% elif info['winrate'] < 50 %}
-                            <span class="winrate text-red-500">{{ info['winrate'] }}%</span>
-                        {% else %}
-                            <span class="winrate text-yellow-500">{{ info['winrate'] }}%</span>
-                        {% endif %}
-                    </p>
 
                     <!-- Champion le plus joué -->
                     <div class="mt-4 flex items-center">
