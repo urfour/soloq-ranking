@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "soloq.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/soloq.py"
+      }
+    ],
+    "env": {
+      "FLASK_ENV": "production",
+      "FLASK_APP": "soloq.py"
+    }
+  }
