@@ -39,6 +39,8 @@ def update_summoners_info():
 
 @app.route('/')
 def index():
+    if 'summoners_infos' not in cache:
+        update_summoners_info()
     return render_template('index.html', infos=cache['summoners_infos'])
 
 if __name__ == '__main__':
@@ -52,4 +54,4 @@ if __name__ == '__main__':
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)

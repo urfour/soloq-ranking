@@ -19,16 +19,18 @@ h1 {
     letter-spacing: 1.5px;
 }
 
+/* Ajuster la taille des boîtes */
+li {
+    flex: 1 1 45%; /* Ajuster la taille des colonnes selon les besoins */
+    margin: 10px;
+    min-width: 500px;
+    max-width: 30%; /* Limiter la largeur des colonnes */
+}
+
 ul {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-}
-
-li {
-    flex: 1 1 30%; /* Ajuster la taille des colonnes selon les besoins */
-    margin: 10px;
-    max-width: 30%; /* Limiter la largeur des colonnes */
 }
 
 li:hover {
