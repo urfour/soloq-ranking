@@ -1,3 +1,4 @@
 Flask==3.0.3
+Flask-Caching==2.3.0
 apscheduler==3.10.4
 opgg-py==1.4.1
