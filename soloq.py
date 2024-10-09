@@ -11,7 +11,10 @@ REAL_SUMMONERS = {
     'Nassime': 'UrFour#suuuu',
     'Alex': 'Kahlazar#EUW',
     'Antoine': 'Big C le Cuisto#2715',
-    'Pipo': 'Pipo le cuisto#EUW'
+    'Pipo': 'Pipo le cuisto#EUW',
+    'Guilhem': 'Bousilleur2Fion#SCUL',
+    'Yann': 'Call me mummy#2811',
+    'Zebi 2': 'EmpereurDesZebis#SCUL'
 }
 
 def rank_to_value(tier, division, lp):
@@ -39,4 +42,4 @@ if __name__ == '__main__':
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(port=5000)
+    app.run(port=5000, debug=True)

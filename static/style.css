@@ -1,211 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1e1e1e; /* Gris foncé */
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
     margin: 0;
     padding: 0;
-    color: #f0f0f0; /* Couleur du texte en gris clair */
+    transition: background-color 0.3s ease;
 }
 
 h1 {
-    color: #f0f0f0; /* Couleur du texte en gris clair */
+    font-size: 2.5em;
+    font-weight: 600;
+    color: #E0E0E0;
     text-align: center;
     margin-top: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1.5px;
 }
 
 ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0 auto;
-    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 li {
-    background-color: #2e2e2e; /* Gris plus clair */
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
+    flex: 1 1 30%; /* Ajuster la taille des colonnes selon les besoins */
+    margin: 10px;
+    max-width: 30%; /* Limiter la largeur des colonnes */
+}
+
+li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 25px rgba(0, 255, 255, 0.5);
 }
 
 li img {
     border-radius: 50%;
-    margin-right: 15px;
+    transition: transform 0.3s ease;
 }
 
-li .rank {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-right: 15px;
-    color: #f0f0f0;
-}
-
-li .info {
-    flex-grow: 1;
-}
-
-li .info strong {
-    display: block;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-
-li .info .details {
-    font-size: 0.9em;
-    color: #ccc; /* Couleur du texte en gris clair */
-}
-
-.win {
-    color: darkblue;
-}
-
-.lose {
-    color: red;
+li:hover img {
+    transform: rotate(10deg);
 }
 
 .winrate.high {
-    color: green;
+    color: #4CAF50;
 }
 
 .winrate.medium {
-    color: orange;
+    color: #FF9800;
 }
 
 .winrate.low {
-    color: red;
-}
-
-.recent-games {
-    margin-top: 10px;
-}
-
-.game-banner {
-    background-color: #2e2e2e;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    padding: 10px;
-    color: #f0f0f0;
-}
-
-.game-banner.victory {
-    border-left: 5px solid darkblue;
-}
-
-.game-banner.defeat {
-    border-left: 5px solid red;
-}
-
-.inner {
-    display: flex;
-    flex-direction: column;
-}
-
-.head-group {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 5px;
-}
-
-.divider {
-    border-bottom: 1px solid #444;
-    margin: 5px 0;
-}
-
-.main {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.info {
-    display: flex;
-    align-items: center;
-}
-
-.info .champion {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-}
-
-.info .champion img {
-    border-radius: 50%;
-}
-
-.kda-stats {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.kda {
-    font-size: 1.2em;
-    margin-bottom: 5px;
-}
-
-.kda-ratio {
-    font-size: 0.9em;
-    color: #ccc;
-}
-
-.game-stats {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.game-stats div {
-    margin-bottom: 5px;
-}
-
-.sub {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.items {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.items .item {
-    margin-right: 5px;
-}
-
-.game-tags__scroll-container {
-    display: flex;
-    align-items: center;
-}
-
-.game-tags {
-    display: flex;
-}
-
-.OPScoreBadge {
-    background-color: #444;
-    border: none;
-    border-radius: 5px;
-    color: #f0f0f0;
-    margin-right: 5px;
-    padding: 5px 10px;
-}
-
-.OPScoreBadge .badge {
-    font-size: 0.9em;
-}
-
-.most-played-champ {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+    color: #F44336;
 }
 
 .most-played-champ img {
-    margin-right: 10px;
+    border-radius: 10px;
+    transition: opacity 0.3s ease;
 }
 
-.most-played-champ span {
-    margin-right: 10px;
+.most-played-champ:hover img {
+    opacity: 0.8;
 }
