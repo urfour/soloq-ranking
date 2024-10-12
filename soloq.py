@@ -19,7 +19,8 @@ REAL_SUMMONERS = {
     'Kahlabzez': 'Pourfendeur2Fiak#SCUL',
     'Nassime': 'Extincteur2Teuch#SCUL',
     'Loan': 'Enchaineur2Renoi#SCUL',
-    'Zebi 2': 'EmpereurDesZebis#SCUL'
+    'Cuillères': 'marteleurdetrous#SCUL',
+    'Dreamer': 'EmpereurDesZebis#SCUL'
 }
 
 def rank_to_value(tier, division, lp):
@@ -54,4 +55,4 @@ if __name__ == '__main__':
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
