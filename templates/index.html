@@ -27,13 +27,13 @@
                             <p>{{ info['tier'] }} {{ info['division'] }} - {{ info['lp'] }} LP
                         </div>
                         <p class="text-gray-400">Victoires : {{ info['win'] }} | Défaites : {{ info['lose'] }}</p>
-                        <p>Taux de victoire : 
+                        <p>Taux de défaite : 
                             {% if info['winrate'] > 50 %}
-                                <span class="winrate text-green-500">{{ info['winrate'] }}%</span>
+                                <span class="winrate text-green-500">{{ 100 - info['winrate'] }}%</span>
                             {% elif info['winrate'] < 50 %}
-                                <span class="winrate text-red-500">{{ info['winrate'] }}%</span>
+                                <span class="winrate text-red-500">{{ 100 - info['winrate'] }}%</span>
                             {% else %}
-                                <span class="winrate text-yellow-500">{{ info['winrate'] }}%</span>
+                                <span class="winrate text-yellow-500">{{ 100 - info['winrate'] }}%</span>
                             {% endif %}
                         </p>
                     {% else %}
