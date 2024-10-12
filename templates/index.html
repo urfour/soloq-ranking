@@ -46,7 +46,7 @@
                         <h6>Champion le plus joué : </h6>
                         {% if info['most_played_champ']['name'] %}
                             <img src="{{ info['most_played_champ']['image'] }}" class="w-8 h-8 rounded-full ml-2 mr-2">
-                            <a href="https://www.op.gg/champions/{{ info['most_played_champ']['name'].lower() }}/build" target="_blank">{{ info['most_played_champ']['name'] }}</a>
+                            <a href="https://www.op.gg/champions/{{ info['most_played_champ']['name'].lower().replace(' ', '') }}/build" target="_blank">{{ info['most_played_champ']['name'] }}</a>
                         {% else %}
                             <p class="ml-1 mr-2">Non défini</span>
                         {% endif %}
