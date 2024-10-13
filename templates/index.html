@@ -63,7 +63,8 @@
     <script>
         document.getElementById('refresh-button').addEventListener('click', function() {
             const button = document.getElementById('refresh-button');
-            button.classList.add('loading');
+            button.classList.remove('hover:bg-blue-700');
+            button.classList.add('loading', 'hover:bg-red-700');
             button.innerHTML = 'En cours...';
             button.disabled = true;
 
@@ -75,7 +76,8 @@
                     }
                 })
                 .finally(() => {
-                    button.classList.remove('loading');
+                    button.classList.remove('loading', 'hover:bg-red-700');
+                    button.classList.add('hover:bg-blue-700');
                     button.disabled = false;
                     button.innerHTML = 'Rafraîchir';
                 });
