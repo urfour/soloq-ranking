@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from os import getenv 
 from dotenv import load_dotenv
 from cachetools import TTLCache
@@ -47,6 +47,11 @@ def index():
     last_updated_time = datetime.strptime(updated_at, "%d/%m/%Y %H:%M:%S")
     time_difference = timeago.format(last_updated_time, current_time, 'fr')
     return render_template('index.html', infos=summoners_infos, updated_at=time_difference)
+
+@app.route('/refresh', methods=['POST'])
+def refresh():
+    update_summoners_info()
+    return jsonify({'status': 'success', 'updated_at': updated_at})
 
 if __name__ == '__main__':
     load_dotenv()

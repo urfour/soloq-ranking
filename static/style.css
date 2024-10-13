@@ -67,3 +67,18 @@ li:hover img {
 .most-played-champ:hover img {
     opacity: 0.8;
 }
+
+.loading {
+    background-color: red;
+    cursor: not-allowed;
+}
+
+.loading::before {
+    content: 'Loading...';
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -8,6 +8,9 @@
     <div class="container mx-auto py-8">
         <h1 class="text-3xl font-bold text-center mb-6">Classement Solo Queue Challenge</h1>
         <h2 class="mt-4 text-center text-gray-400">Dernière mise à jour : {{ updated_at }}</h3>
+        <div class="flex justify-center mb-4 mt-4">
+            <button id="refresh-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Rafraîchir</button>
+        </div>
         <ul>
             {% for info in infos %}
             <li class="my-4 p-4 bg-gray-800 rounded-lg shadow-md transition-transform transform hover:scale-105 flex flex-col items-start">
@@ -57,4 +60,25 @@
             {% endfor %}
         </ul>
     </div>
+    <script>
+        document.getElementById('refresh-button').addEventListener('click', function() {
+            const button = document.getElementById('refresh-button');
+            button.classList.add('loading');
+            button.innerHTML = 'En cours...';
+            button.disabled = true;
+
+            fetch('/refresh', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        location.reload();
+                    }
+                })
+                .finally(() => {
+                    button.classList.remove('loading');
+                    button.disabled = false;
+                    button.innerHTML = 'Rafraîchir';
+                });
+        });
+    </script>
 </body>
