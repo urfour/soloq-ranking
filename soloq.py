@@ -9,7 +9,7 @@ import atexit
 import time
 
 app = Flask(__name__)
-cache = TTLCache(maxsize=100, ttl=600)
+cache = TTLCache(maxsize=100, ttl=180)
 
 REAL_SUMMONERS = {
     'Guilhem': 'Bousilleur2Fion#SCUL',
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     cass.set_riot_api_key(RIOT_API_KEY)
     print('Using Riot API key:', RIOT_API_KEY)
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=20)
+    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=5)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
