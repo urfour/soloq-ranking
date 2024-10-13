@@ -7,9 +7,10 @@ from summoners import get_all_summoners
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 import time
+from datetime import datetime
+import timeago
 
 app = Flask(__name__)
-cache = TTLCache(maxsize=100, ttl=180)
 
 REAL_SUMMONERS = {
     'Guilhem': 'Bousilleur2Fion#SCUL',
@@ -23,6 +24,9 @@ REAL_SUMMONERS = {
     'Dreamer': 'EmpereurDesZebis#SCUL'
 }
 
+updated_at = ''
+summoners_infos = []
+
 def rank_to_value(tier, division, lp):
     tiers = ['UNRANKED', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER']
     divisions = ['IV', 'III', 'II', 'I', '0']
@@ -31,18 +35,18 @@ def rank_to_value(tier, division, lp):
     return tier_value + division_value + lp / 100
 
 def update_summoners_info():
-    if 'summoners_infos' in cache:
-        return
-    else:
-        cache['summoners_infos'] = get_all_summoners(REAL_SUMMONERS)
-        cache['summoners_infos'].sort(key=lambda x: rank_to_value(x['tier'], x['division'], x['lp']), reverse=True)
-    print(f'[{time.strftime("%Y-%m-%d %H:%M:%S")}] Updated summoners info')
+    global summoners_infos, updated_at
+    summoners_infos = get_all_summoners(REAL_SUMMONERS)
+    summoners_infos.sort(key=lambda x: rank_to_value(x['tier'], x['division'], x['lp']), reverse=True)
+    updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
+    print(f'[{time.strftime("%d/%m/%Y %H:%M:%S")}] Updated summoners info')
 
 @app.route('/')
 def index():
-    if 'summoners_infos' not in cache:
-        update_summoners_info()
-    return render_template('index.html', infos=cache['summoners_infos'])
+    current_time = datetime.now()
+    last_updated_time = datetime.strptime(updated_at, "%d/%m/%Y %H:%M:%S")
+    time_difference = timeago.format(last_updated_time, current_time, 'fr')
+    return render_template('index.html', infos=summoners_infos, updated_at=time_difference)
 
 if __name__ == '__main__':
     load_dotenv()
@@ -55,4 +59,4 @@ if __name__ == '__main__':
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', debug=True)
