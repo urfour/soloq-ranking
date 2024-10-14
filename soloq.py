@@ -7,7 +7,7 @@ from summoners import get_all_summoners
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import timeago
 
 app = Flask(__name__)
@@ -56,12 +56,23 @@ def refresh():
 if __name__ == '__main__':
     load_dotenv()
     RIOT_API_KEY = getenv('RIOT_API_KEY')
-    cass.set_riot_api_key(RIOT_API_KEY)
-    print('Using Riot API key:', RIOT_API_KEY)
+    cass.apply_settings({
+        'pipeline': {
+            "Cache": {
+                "expirations": {
+                    "LeagueSummonerEntries": timedelta(minutes=5),
+                }
+            }, 
+            'DDragon': {}, 
+            'RiotAPI': {
+                'api_key': RIOT_API_KEY
+            }
+        },
+    })
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=5)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
     update_summoners_info()
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0')
