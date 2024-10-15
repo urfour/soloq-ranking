@@ -50,11 +50,11 @@
                         </div>
                         <p>Taux de défaite : 
                             {% if info['winrate'] > 50 %}
-                                <span class="winrate text-green-500">{{ round(100 - info['winrate'], 2) }}%</span>
+                                <span class="winrate text-green-500">{{ info['loserate'] }}%</span>
                             {% elif info['winrate'] < 50 %}
-                                <span class="winrate text-red-500">{{ round(100 - info['winrate'], 2) }}%</span>
+                                <span class="winrate text-red-500">{{ info['loserate'] }}%</span>
                             {% else %}
-                                <span class="winrate text-yellow-500">{{ round(100 - info['winrate'], 2) }}%</span>
+                                <span class="winrate text-yellow-500">{{ info['loserate'] }}%</span>
                             {% endif %}
                         </p>
                     {% else %}

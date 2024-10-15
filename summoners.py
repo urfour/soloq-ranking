@@ -61,7 +61,8 @@ def get_all_summoners(summoners : dict):
             summoner_infos['games_played'] = solo_ranked.wins + solo_ranked.losses
             summoner_infos['win'] = solo_ranked.wins
             summoner_infos['lose'] = solo_ranked.losses
-            summoner_infos['winrate'] = solo_ranked.wins / (solo_ranked.wins + solo_ranked.losses) * 100
+            summoner_infos['winrate'] = round(solo_ranked.wins / (solo_ranked.wins + solo_ranked.losses) * 100)
+            summoner_infos['loserate'] = round(100 - summoner_infos['winrate'], 2)
             summoner_infos['most_played_champ'] = {}
             summoner_infos['last_matches'] = get_last_10_matches(summoner)
             summoner_infos['in_game'] = is_in_game(summoner)
