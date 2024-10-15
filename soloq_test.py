@@ -67,5 +67,5 @@ if __name__ == '__main__':
     scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=5)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-    update_summoners_info()
     app.run(host='0.0.0.0')
+    update_summoners_info()
