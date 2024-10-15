@@ -24,7 +24,7 @@ REAL_SUMMONERS = {
     'Dreamer': 'EmpereurDesZebis#SCUL'
 }
 
-updated_at = ''
+updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
 summoners_infos = []
 
 def rank_to_value(tier, division, lp):
@@ -61,6 +61,8 @@ if __name__ == '__main__':
             "Cache": {
                 "expirations": {
                     "LeagueSummonerEntries": timedelta(minutes=5),
+                    'Match': timedelta(minutes=5),
+                    'CurrentMatch': timedelta(seconds=30),
                 }
             }, 
             'DDragon': {}, 
@@ -73,6 +75,5 @@ if __name__ == '__main__':
     scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=5)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-
     update_summoners_info()
     app.run(host='0.0.0.0')

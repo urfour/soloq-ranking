@@ -21,6 +21,7 @@ h1 {
 
 /* Ajuster la taille des boîtes */
 li {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     flex: 1 1 45%; /* Ajuster la taille des colonnes selon les besoins */
     margin: 10px;
     min-width: 500px;
@@ -74,11 +75,19 @@ li:hover img {
 }
 
 .loading::before {
-    content: 'Loading...';
+    content: 'Chargement...';
     color: white;
     font-weight: 600;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.match-result {
+    transition: transform 0.3s ease;
+}
+
+li:hover .match-result {
+    transform: rotate(10deg);
 }
