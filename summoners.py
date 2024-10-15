@@ -12,12 +12,23 @@ def is_in_game(summoner):
         return False
     return False
 
-def get_last_10_matches(summoner : Summoner):
-    # Get the last 10 matches of the summoner in solo queue
-    match_history = MatchHistory(puuid=summoner.puuid, continent=Continent.europe, queue=Queue.ranked_solo_fives, count=10)
+def get_last_10_matches(summoner: Summoner):
+    """
+    Get the last 10 matches of the summoner in solo queue.
+    
+    Parameters:
+    summoner (Summoner): The summoner whose match history is to be retrieved.
+    
+    Returns:
+    list: A list of dictionaries containing match results and champion images.
+    """
+    match_history = MatchHistory(puuid=summoner.puuid, continent=Continent.europe, queue=Queue.ranked_solo_fives, count=15)
     last_10_matches = []
-    match : Match
+    nb_matches = 0
+
     for match in match_history:
+        if nb_matches >= 10:
+            break
         participant = match.participants[summoner]
         if match.duration.total_seconds() < 300:
             continue
@@ -26,6 +37,8 @@ def get_last_10_matches(summoner : Summoner):
             'champion_image': participant.champion.image.url
         }
         last_10_matches.append(match_info)
+        nb_matches += 1
+
     last_10_matches.reverse()
     return last_10_matches
 
