@@ -1,6 +1,6 @@
 import cassiopeia as cass
 from cassiopeia.data import Queue, Continent
-from cassiopeia.core import Account, ChampionMastery, MatchHistory, Summoner, CurrentMatch
+from cassiopeia.core import Account, ChampionMastery, MatchHistory, Summoner, CurrentMatch, Match
 from merakicommons.container import SearchError
 
 def is_in_game(summoner):
@@ -16,8 +16,11 @@ def get_last_10_matches(summoner : Summoner):
     # Get the last 10 matches of the summoner in solo queue
     match_history = MatchHistory(puuid=summoner.puuid, continent=Continent.europe, queue=Queue.ranked_solo_fives, count=10)
     last_10_matches = []
+    match : Match
     for match in match_history:
         participant = match.participants[summoner]
+        if match.duration.total_seconds() < 300:
+            continue
         match_info = {
             'result': 'win' if participant.stats.win else 'lose',
             'champion_image': participant.champion.image.url
