@@ -1,12 +1,15 @@
 # SoloQ Ranking
 
-Ce projet est une application web Flask qui affiche le classement des invocateurs de League of Legends en utilisant les données de l'API OPGG. L'application met à jour les informations des invocateurs à intervalles réguliers et les affiche sur une page web.
+Ce projet est une application web Flask qui affiche le classement des invocateurs de League of Legends en utilisant les données de l'API Riot. L'application met à jour les informations des personnes à intervalles réguliers et les affiche sur une page web.
 
 ## Fonctionnalités
 
 - Affiche le classement des invocateurs avec leurs informations de rang, division, LP, victoires, défaites et taux de victoire.
-- Affiche les trois dernières parties jouées pour chaque invocateur avec des bandeaux colorés (bleu pour les victoires, rouge pour les défaites).
-- Met à jour automatiquement les informations des invocateurs toutes les minutes.
+- Affiche les 10 dernières parties jouées pour chaque invocateur avec des bandeaux colorés (bleu pour les victoires, rouge pour les défaites) et le champion correspondant.
+- Met à jour automatiquement les informations des invocateurs toutes les cinq minutes.
+- Permet de rafraîchir manuellement les informations des invocateurs via un bouton.
+- Affiche l'état actuel des invocateurs (en match ou non).
+- Affiche les informations de la dernière mise à jour des données.
 
 ## Prérequis
 
