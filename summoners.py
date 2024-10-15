@@ -5,7 +5,7 @@ from merakicommons.container import SearchError
 
 def is_in_game(summoner):
     try:
-        current_match = CurrentMatch(summoner=summoner)
+        current_match = CurrentMatch(summoner=summoner, region='EUW')
         if current_match.queue == Queue.ranked_solo_fives:
             return True
     except:
