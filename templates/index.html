@@ -1,5 +1,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <title>Classement SoloQ</title>
@@ -10,6 +11,7 @@
         <h2 class="mt-4 text-center text-gray-400">Dernière mise à jour : {{ updated_at }}</h3>
         <div class="flex justify-center mb-4 mt-4">
             <button id="refresh-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Rafraîchir</button>
+            <button id="notification-button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">Activer les notifications</button>
         </div>
         <ul>
             {% for info in infos %}
@@ -77,7 +79,86 @@
             {% endfor %}
         </ul>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationButton = document.getElementById('notification-button');
+            if (Notification.permission === 'granted') {
+                notificationButton.hidden = true;
+                notificationButton.disabled = true;
+                notificationButton.textContent = 'Notifications activées';
+            } else if (Notification.permission === 'denied') {
+                notificationButton.disabled = true;
+                notificationButton.textContent = 'Notifications refusées';
+            }
+
+            notificationButton.addEventListener('click', function() {
+                if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            console.log('Notification permission granted.');
+                            notificationButton.disabled = true;
+                            notificationButton.textContent = 'Notifications activées';
+                        } else if (permission === 'denied') {
+                            notificationButton.disabled = true;
+                            notificationButton.textContent = 'Notifications refusées';
+                        }
+                    });
+                }
+            });
+        });
+        const socket = io();
+        toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('connection_status', function(data) {
+            if (data.status === 'connected') {
+                console.log('Client successfully connected');
+            }
+        });
+
+        socket.on('player_online', function(data) {
+            console.log(`${data.name} is now ingame!`);
+            toastr.success(`${data.name} est maintenant en partie !`, 'Notification');
+            if (Notification.permission === 'granted') {
+                new Notification('Notification', {
+                    body: `${data.name} est maintenant en jeu !`
+                });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification('Notification', {
+                            body: `${data.name} est maintenant en jeu !`
+                        });
+                    }
+                });
+            }
+        });
         document.getElementById('refresh-button').addEventListener('click', function() {
             const button = document.getElementById('refresh-button');
             button.classList.remove('hover:bg-blue-700');

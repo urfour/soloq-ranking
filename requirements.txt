@@ -4,3 +4,4 @@ cachetools==5.5.0
 apscheduler==3.10.4
 python-dotenv==1.0.0
 timeago==1.0.16
+flask_socketio==5.4.1

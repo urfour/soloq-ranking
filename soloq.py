@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify
+from flask_socketio import SocketIO, emit
 from os import getenv 
 from dotenv import load_dotenv
-from cachetools import TTLCache
 import cassiopeia as cass
 from summoners import get_all_summoners
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 import timeago
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 REAL_SUMMONERS = {
     'Guilhem': 'Bousilleur2Fion#SCUL',
@@ -35,8 +36,20 @@ def rank_to_value(tier, division, lp):
     return tier_value + division_value + lp / 100
 
 def update_summoners_info():
-    global summoners_infos, updated_at
+    global old_summoners_infos, summoners_infos, updated_at
+    old_summoners_infos = summoners_infos.copy()
     summoners_infos = get_all_summoners(REAL_SUMMONERS)
+    if old_summoners_infos == []:
+        for i, name in enumerate(REAL_SUMMONERS.keys()):
+            if summoners_infos[i]['in_game']: 
+                print(f'{name} is connected')
+                socketio.emit('player_online', {'name': name})
+    else:
+        for i, name in enumerate(REAL_SUMMONERS.keys()):
+            if not old_summoners_infos[i]['in_game'] and summoners_infos[i]['in_game']:
+                print(f'{name} is connected')
+                socketio.emit('player_online', {'name': name})
+
     summoners_infos.sort(key=lambda x: rank_to_value(x['tier'], x['division'], x['lp']), reverse=True)
     updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
     print(f'[{time.strftime("%d/%m/%Y %H:%M:%S")}] Updated summoners info')
@@ -60,8 +73,8 @@ if __name__ == '__main__':
         'pipeline': {
             "Cache": {
                 "expirations": {
-                    "LeagueSummonerEntries": timedelta(minutes=5),
-                    'Match': timedelta(minutes=5),
+                    "LeagueSummonerEntries": timedelta(minutes=3),
+                    'Match': timedelta(minutes=3),
                     'CurrentMatch': timedelta(seconds=30),
                 }
             }, 
@@ -72,8 +85,8 @@ if __name__ == '__main__':
         },
     })
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=5)
+    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=1)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-    app.run(host='0.0.0.0')
     update_summoners_info()
+    socketio.run(app, host='0.0.0.0')

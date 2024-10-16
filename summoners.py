@@ -1,13 +1,30 @@
+from typing import Union
 import cassiopeia as cass
 from cassiopeia.data import Queue, Continent
 from cassiopeia.core import Account, ChampionMastery, MatchHistory, Summoner, CurrentMatch, Match
 from merakicommons.container import SearchError
 
-def is_in_game(summoner):
+def is_in_game(summoner : Union[Summoner, Account, str]):
+    if isinstance(summoner, str):
+        summoner = Account(name=summoner.split('#')[0], tagline=summoner.split('#')[1], region='EUW').summoner
+    elif isinstance(summoner, Account):
+        summoner = summoner.summoner
     try:
         current_match = CurrentMatch(summoner=summoner, region='EUW')
         if current_match.queue == Queue.ranked_solo_fives:
             return True
+    except:
+        return False
+    return False
+
+def is_connected(summoner : Union[Summoner, Account, str]):
+    if isinstance(summoner, str):
+        summoner = Account(name=summoner.split('#')[0], tagline=summoner.split('#')[1], region='EUW').summoner
+    elif isinstance(summoner, Account):
+        summoner = summoner.summoner
+    try:
+        current_match = CurrentMatch(summoner=summoner, region='EUW')
+        return True
     except:
         return False
     return False
@@ -51,6 +68,7 @@ def get_all_summoners(summoners : dict):
         summoner_infos['name'] = name
         summoner_infos['pseudo'] = account.name_with_tagline
         summoner_infos['image'] = summoner.profile_icon().url
+        summoner_infos['is_connected'] = is_connected(summoner)
 
         entries = account.summoner.league_entries
         try:
