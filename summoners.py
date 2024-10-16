@@ -24,10 +24,10 @@ def is_connected(summoner : Union[Summoner, Account, str]):
         summoner = summoner.summoner
     try:
         current_match = CurrentMatch(summoner=summoner, region='EUW')
-        return True
+        return True, current_match.queue().name
     except:
-        return False
-    return False
+        return False, None
+    return False, None
 
 def get_last_10_matches(summoner: Summoner):
     """
@@ -68,7 +68,7 @@ def get_all_summoners(summoners : dict):
         summoner_infos['name'] = name
         summoner_infos['pseudo'] = account.name_with_tagline
         summoner_infos['image'] = summoner.profile_icon().url
-        summoner_infos['is_connected'] = is_connected(summoner)
+        summoner_infos['is_connected'], summoner_infos['current_game'] = is_connected(summoner)
 
         entries = account.summoner.league_entries
         try:
