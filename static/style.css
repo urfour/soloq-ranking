@@ -91,3 +91,14 @@ li:hover img {
 li:hover .match-result {
     transform: rotate(10deg);
 }
+
+@keyframes flame {
+    0% { box-shadow: 0 0 10px rgba(255, 69, 0, 0.5), 0 0 20px rgba(255, 69, 0, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 69, 0, 1), 0 0 30px rgba(255, 69, 0, 1); }
+    100% { box-shadow: 0 0 10px rgba(255, 69, 0, 0.5), 0 0 20px rgba(255, 69, 0, 0.5); }
+}
+
+.flame-animation {
+    animation: flame 1s infinite;
+    border-radius: 10px;
+}

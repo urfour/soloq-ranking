@@ -55,6 +55,8 @@ def update_summoners_info():
             elif not current_status and previous_status:
                 print(f'{name} is disconnected')
                 socketio.emit('player_offline', {'name': name})
+            else:
+                socketio.emit('update_player_status', {'name': name, 'in_game': current_status})
 
     old_online_statuses = online_statuses.copy()
 
@@ -96,5 +98,5 @@ if __name__ == '__main__':
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
     update_summoners_info()
-    # if app.config['ENV'] == 'development':
-    socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
+    if app.config['ENV'] == 'development':
+        socketio.run(app, host='0.0.0.0')

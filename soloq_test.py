@@ -17,7 +17,8 @@ socketio = SocketIO(app)
 
 REAL_SUMMONERS = {
     'Nassime': 'UrFour#suuuu',
-    'Alex': 'Kahlazar#EUW'
+    'Alex': 'Kahlazar#EUW',
+    'Mogro': 'Enchaineur2Renoi#SCUL'
 }
 
 updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
@@ -50,6 +51,8 @@ def update_summoners_info():
             elif not current_status and previous_status:
                 print(f'{name} is disconnected')
                 socketio.emit('player_offline', {'name': name})
+            else:
+                socketio.emit('update_player_status', {'name': name, 'in_game': current_status})
 
     old_online_statuses = copy.deepcopy(online_statuses)
 
