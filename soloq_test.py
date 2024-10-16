@@ -15,9 +15,6 @@ import copy
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-app = Flask(__name__)
-socketio = SocketIO(app)
-
 REAL_SUMMONERS = {
     'Nassime': 'UrFour#suuuu',
     'Alex': 'Kahlazar#EUW'

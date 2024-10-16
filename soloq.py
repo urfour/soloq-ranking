@@ -27,6 +27,8 @@ REAL_SUMMONERS = {
 
 updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
 summoners_infos = []
+online_statuses = {}
+old_online_statuses = {}
 
 def rank_to_value(tier, division, lp):
     tiers = ['UNRANKED', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER']
@@ -93,5 +95,5 @@ if __name__ == '__main__':
     scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=2)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-    # update_summoners_info()
-    socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
+    update_summoners_info()
+    socketio.run(app, host='0.0.0.0')
