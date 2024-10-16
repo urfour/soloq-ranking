@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -144,21 +145,40 @@
 
         socket.on('player_online', function(data) {
             console.log(`${data.name} is now ingame!`);
-            toastr.success(`${data.name} est maintenant en partie !`, 'Notification');
+            toastr.success(`${data.name} est maintenant en partie ${data.current_game} !`, 'Notification');
             if (Notification.permission === 'granted') {
                 new Notification('Notification', {
-                    body: `${data.name} est maintenant en jeu !`
+                    body: `${data.name} est maintenant en partie ${data.current_game} !`
                 });
             } else if (Notification.permission !== 'denied') {
                 Notification.requestPermission().then(permission => {
                     if (permission === 'granted') {
                         new Notification('Notification', {
-                            body: `${data.name} est maintenant en jeu !`
+                            body: `${data.name} est maintenant en partie ${data.current_game} !`
                         });
                     }
                 });
             }
         });
+
+        socket.on('player_offline', function(data) {
+            console.log(`${data.name} is now offline!`);
+            toastr.warning(`${data.name} a terminé sa partie !`, 'Notification');
+            if (Notification.permission === 'granted') {
+                new Notification('Notification', {
+                    body: `${data.name} a terminé sa partie !`
+                });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification('Notification', {
+                            body: `${data.name} a terminé sa partie !`
+                        });
+                    }
+                });
+            }
+        })
+
         document.getElementById('refresh-button').addEventListener('click', function() {
             const button = document.getElementById('refresh-button');
             button.classList.remove('hover:bg-blue-700');

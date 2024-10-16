@@ -3,6 +3,7 @@ import cassiopeia as cass
 from cassiopeia.data import Queue, Continent
 from cassiopeia.core import Account, ChampionMastery, MatchHistory, Summoner, CurrentMatch, Match
 from merakicommons.container import SearchError
+from datapipelines.common import NotFoundError
 
 def is_in_game(summoner : Union[Summoner, Account, str]):
     if isinstance(summoner, str):
@@ -10,8 +11,7 @@ def is_in_game(summoner : Union[Summoner, Account, str]):
     elif isinstance(summoner, Account):
         summoner = summoner.summoner
     try:
-        current_match = CurrentMatch(summoner=summoner, region='EUW')
-        if current_match.queue == Queue.ranked_solo_fives:
+        if summoner.current_match.queue == Queue.ranked_solo_fives:
             return True
     except:
         return False
@@ -23,12 +23,12 @@ def is_connected(summoner : Union[Summoner, Account, str]):
     elif isinstance(summoner, Account):
         summoner = summoner.summoner
     try:
-        current_match = CurrentMatch(summoner=summoner, region='EUW')
-        return True, current_match.queue().name
-    except:
+        if summoner.current_match:
+            return True, summoner.current_match.queue.name
+    except NotFoundError:
         return False, None
     return False, None
-
+    
 def get_last_10_matches(summoner: Summoner):
     """
     Get the last 10 matches of the summoner in solo queue.
