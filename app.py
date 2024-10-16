@@ -96,5 +96,5 @@ if __name__ == '__main__':
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
     update_summoners_info()
-    if app.config.get('ENV') == 'development':
-        socketio.run(app, host='0.0.0.0')
+    # if app.config['ENV'] == 'development':
+        socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
