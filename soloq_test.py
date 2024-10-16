@@ -1,7 +1,8 @@
 from flask import Flask, render_template, jsonify
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 from os import getenv 
 from dotenv import load_dotenv
+from cachetools import TTLCache
 import cassiopeia as cass
 from summoners import get_all_summoners
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -9,24 +10,23 @@ import atexit
 import time
 from datetime import datetime, timedelta
 import timeago
+import copy
+
+app = Flask(__name__)
+socketio = SocketIO(app)
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 REAL_SUMMONERS = {
-    'Guilhem': 'Bousilleur2Fion#SCUL',
-    'Pipo': 'Destructeur2vulv#SCUL',
-    'Yann': 'chef dé kayoux#SCUL',
-    'Antoine': 'Malaxeur2Bzez#SCUL',
-    'Kahlabzez': 'Pourfendeur2Fiak#SCUL',
-    'Nassime': 'Extincteur2Teuch#SCUL',
-    'Loan': 'Enchaineur2Renoi#SCUL',
-    'Cuillères': 'marteleurdetrous#SCUL',
-    'Dreamer': 'EmpereurDesZebis#SCUL'
+    'Nassime': 'UrFour#suuuu',
+    'Alex': 'Kahlazar#EUW'
 }
 
 updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
 summoners_infos = []
+online_statuses = {}
+old_online_statuses = {}
 
 def rank_to_value(tier, division, lp):
     tiers = ['UNRANKED', 'IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER']
@@ -54,7 +54,7 @@ def update_summoners_info():
                 print(f'{name} is disconnected')
                 socketio.emit('player_offline', {'name': name})
 
-    old_online_statuses = online_statuses.copy()
+    old_online_statuses = copy.deepcopy(online_statuses)
 
     updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
     print(f'[{updated_at}] Updated summoners info')
@@ -80,7 +80,7 @@ if __name__ == '__main__':
                 "expirations": {
                     "LeagueSummonerEntries": timedelta(minutes=3),
                     'Match': timedelta(minutes=3),
-                    'CurrentMatch': timedelta(seconds=30),
+                    'CurrentMatch': timedelta(seconds=1),
                 }
             }, 
             'DDragon': {}, 
@@ -90,8 +90,8 @@ if __name__ == '__main__':
         },
     })
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=2)
+    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=1)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-    # update_summoners_info()
-    socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
+    update_summoners_info()
+    socketio.run(app, host='0.0.0.0')
