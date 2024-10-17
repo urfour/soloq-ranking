@@ -7,8 +7,6 @@ from os import getenv
 from dotenv import load_dotenv
 import cassiopeia as cass
 from summoners import get_all_summoners
-from apscheduler.schedulers.background import BackgroundScheduler
-import atexit
 import time
 from datetime import datetime, timedelta
 import timeago
@@ -39,6 +37,11 @@ def rank_to_value(tier, division, lp):
     tier_value = tiers.index(tier) * 4
     division_value = divisions.index(division)
     return tier_value + division_value + lp / 100
+
+def background_task():
+    while True:
+        socketio.sleep(120)
+        update_summoners_info()
 
 def update_summoners_info():
     global old_online_statuses, online_statuses, summoners_infos, updated_at
@@ -96,10 +99,7 @@ if __name__ == '__main__':
             }
         },
     })
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=update_summoners_info, trigger="interval", minutes=2)
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+    socketio.start_background_task(background_task)
     update_summoners_info()
     if app.config['ENV'] == 'development':
-        socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
+        socketio.run(app, host='0.0.0.0')
