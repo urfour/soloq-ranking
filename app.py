@@ -81,7 +81,7 @@ def refresh():
     update_summoners_info()
     return jsonify({'status': 'success', 'updated_at': updated_at})
 
-if __name__ == '__main__':
+def init_app():
     load_dotenv()
     RIOT_API_KEY = getenv('RIOT_API_KEY')
     cass.apply_settings({
@@ -101,5 +101,10 @@ if __name__ == '__main__':
     })
     socketio.start_background_task(background_task)
     update_summoners_info()
+
+if __name__ == '__main__':
+    init_app()
     if app.config['ENV'] == 'development':
         socketio.run(app, host='0.0.0.0')
+
+init_app()
