@@ -10,9 +10,43 @@ from summoners import get_all_summoners
 import time
 from datetime import datetime, timedelta
 import timeago
+from celery import Celery
+from celery.schedules import crontab
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+
+def make_celery(app):
+    celery = Celery(
+        app.import_name,
+        backend=app.config['CELERY_RESULT_BACKEND'],
+        broker=app.config['CELERY_BROKER_URL']
+    )
+    celery.conf.update(app.config)
+    TaskBase = celery.Task
+
+    class ContextTask(TaskBase):
+        abstract = True
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return TaskBase.__call__(self, *args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
+app.config.update(
+    CELERY_BROKER_URL='redis://localhost:6379/0',
+    CELERY_RESULT_BACKEND='redis://localhost:6379/0',
+    CELERY_BEAT_SCHEDULE={
+    'update-summoners-info-every-2-minutes': {
+        'task': 'app.update_summoners_info',
+        'schedule': crontab(minute='*/2'),
+    },
+}
+)
+
+celery = make_celery(app)
 
 REAL_SUMMONERS = {
     'Guilhem': 'Bousilleur2Fion#SCUL',
@@ -38,11 +72,7 @@ def rank_to_value(tier, division, lp):
     division_value = divisions.index(division)
     return tier_value + division_value + lp / 100
 
-def background_task():
-    while True:
-        socketio.sleep(120)
-        update_summoners_info()
-
+@celery.task
 def update_summoners_info():
     global old_online_statuses, online_statuses, summoners_infos, updated_at
     summoners_infos = get_all_summoners(REAL_SUMMONERS)
@@ -78,7 +108,7 @@ def index():
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
-    update_summoners_info()
+    update_summoners_info().delay()
     return jsonify({'status': 'success', 'updated_at': updated_at})
 
 if __name__ == '__main__':
@@ -99,7 +129,6 @@ if __name__ == '__main__':
             }
         },
     })
-    socketio.start_background_task(background_task)
-    update_summoners_info()
+    # update_summoners_info()
     if app.config['ENV'] == 'development':
         socketio.run(app, host='0.0.0.0')

@@ -5,3 +5,5 @@ python-dotenv==1.0.0
 timeago==1.0.16
 flask_socketio
 eventlet>=0.31.0
+Celery>=5.4.0
+Redis>=5.1.1
