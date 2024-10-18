@@ -40,7 +40,7 @@ def rank_to_value(tier, division, lp):
 
 def background_task():
     while True:
-        socketio.sleep(120)
+        socketio.sleep(60)
         update_summoners_info()
 
 def update_summoners_info():
@@ -56,13 +56,15 @@ def update_summoners_info():
             current_game = online_statuses[name]['current_game']
             previous_status = old_online_statuses[name]['is_connected']
             if current_status and not previous_status:
-                print(f'{name} is connected')
-                socketio.emit('player_online', {'name': name, 'current_game': current_game})
+                print(f'{name} has started a game')
+                socketio.emit('new_game', {'name': name, 'current_game': current_game})
             elif not current_status and previous_status:
-                print(f'{name} is disconnected')
-                socketio.emit('player_offline', {'name': name})
+                print(f'{name} finished his game')
+                socketio.emit('end_game', {'name': name})
             else:
-                socketio.emit('update_player_status', {'name': name, 'in_game': current_status})
+                player_info = next((x for x in summoners_infos if x['name'] == name), None)
+                if player_info:
+                    socketio.emit('update_player_data', player_info)
 
     old_online_statuses = online_statuses.copy()
 
@@ -84,6 +86,7 @@ def refresh():
 def init_app():
     load_dotenv()
     RIOT_API_KEY = getenv('RIOT_API_KEY')
+    app.config['ENV'] = getenv('FLASK_ENV', 'development')
     cass.apply_settings({
         'pipeline': {
             "Cache": {

@@ -141,7 +141,7 @@
             }
         });
 
-        socket.on('player_online', function(data) {
+        socket.on('new_game', function(data) {
             console.log(`${data.name} is now ingame!`);
             toastr.success(`${data.name} est maintenant en partie ${data.current_game} !`, 'Notification');
             if (Notification.permission === 'granted') {
@@ -164,7 +164,7 @@
             }
         });
 
-        socket.on('player_offline', function(data) {
+        socket.on('end_game', function(data) {
             console.log(`${data.name} is now offline!`);
             toastr.warning(`${data.name} a terminé sa partie !`, 'Notification');
             if (Notification.permission === 'granted') {
@@ -186,7 +186,7 @@
         }
         })
 
-        socket.on('update_player_status', function(data) {
+        socket.on('update_player_data', function(data) {
             const playerCard = document.getElementById(`player-card-${data.name}`);
             const inGameElement = document.getElementById(`in-game-${data.name}`);
             if (playerCard) {
@@ -196,9 +196,39 @@
                 } else {
                     playerCard.classList.remove('flame-animation');
                     inGameElement.style.display = 'none';
-                }
+                    updateElementWithAnimation(playerCard.querySelector('.rank'), data.rank);
+                    updateElementWithAnimation(playerCard.querySelector('img'), data.image, 'src');
+                    updateElementWithAnimation(playerCard.querySelector('.player-name'), `${data.name} (${data.pseudo})`);
+                    updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `https://opgg-static.akamaized.net/images/medals_new/${data.tier.toLowerCase()}.png`, 'src');
+                    updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `${data.tier} Icon`, 'alt');
+                    updateElementWithAnimation(playerCard.querySelector('.tier-icon').nextElementSibling, `${data.tier} ${data.division} - ${data.lp} LP`);
+                    updateElementWithAnimation(playerCard.querySelector('.text-gray-400'), `Victoires : ${data.win} | Défaites : ${data.lose}`);
+
+                    const lastMatchesContainer = playerCard.querySelector('.flex.items-center.mb-2');
+                    lastMatchesContainer.innerHTML = '';
+                    const lastMatch = info.last_matches[0];
+                    const matchDiv = document.createElement('div');
+                    matchDiv.classList.add('relative', 'w-8', 'h-8', 'mr-2');
+                    matchDiv.innerHTML = `
+                        <img src="${lastMatch.champion_image}" alt="Champion Image" class="w-8 h-8 rounded">
+                        <div class="absolute inset-0 flex items-center justify-center ${lastMatch.result == 'win' ? 'bg-blue-500' : 'bg-red-500'} opacity-40 match-result"></div>
+                    `;
+                    lastMatchesContainer.appendChild(matchDiv);
+                    matchDiv.classList.add('update-animation');
+                    setTimeout(() => matchDiv.classList.remove('update-animation'), 1000);
+                    }
             }
         });
+
+        function updateElementWithAnimation(element, newValue, attribute = 'textContent') {
+            if (attribute === 'textContent') {
+                element.textContent = newValue;
+            } else {
+                element[attribute] = newValue;
+            }
+            element.classList.add('update-animation');
+            setTimeout(() => element.classList.remove('update-animation'), 1000);
+        }
 
         document.getElementById('refresh-button').addEventListener('click', function() {
             const button = document.getElementById('refresh-button');
