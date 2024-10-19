@@ -201,6 +201,7 @@
                     playerCard.classList.remove('flame-animation');
                     inGameElement.style.display = 'none';
                     updateElementWithAnimation(playerCard.querySelector('.rank'), data.rank);
+                    updateElementWithAnimation(playerCard.querySelector('img'), data.image, 'src');
                     updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `https://opgg-static.akamaized.net/images/medals_new/${data.tier.toLowerCase()}.png`, 'src');
                     updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `${data.tier} Icon`, 'alt');
                     updateElementWithAnimation(playerCard.querySelector('.tier-icon').nextElementSibling, `${data.tier} ${data.division} - ${data.lp} LP`);
@@ -208,7 +209,7 @@
 
                     const lastMatchesContainer = playerCard.querySelector('.flex.items-center.mb-2');
                     lastMatchesContainer.innerHTML = '';
-                    const lastMatch = info.last_matches[0];
+                    const lastMatch = data.last_matches[0];
                     const matchDiv = document.createElement('div');
                     matchDiv.classList.add('relative', 'w-8', 'h-8', 'mr-2');
                     matchDiv.innerHTML = `
