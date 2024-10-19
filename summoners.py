@@ -95,7 +95,7 @@ def get_all_summoners(summoners : dict):
             summoner_infos['most_played_champ'] = {}
             summoner_infos['last_matches'] = []
             summoner_infos['in_game'] = False
-        if not summoner.champion_masteries[0]:
+        if not summoner.champion_masteries or summoner.champion_masteries[0]:
             break
         champ: ChampionMastery
         champ = summoner.champion_masteries[0]
