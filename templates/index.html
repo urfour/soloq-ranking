@@ -45,7 +45,7 @@
                         </div>
                         <p class="text-gray-400">Victoires : {{ info['win'] }} | Défaites : {{ info['lose'] }}</p>
                         <!-- Dernières parties -->
-                        <div class="flex items-center mb-2">
+                        <div id="last-matches-{{ info['name']}}" class="flex items-center mb-2">
                             {% for match in info['last_matches'] %}
                                 <div class="relative w-8 h-8 mr-2">
                                     <img src="{{ match.champion_image }}" alt="Champion Image" class="w-8 h-8 rounded">
@@ -200,32 +200,55 @@
                 } else {
                     playerCard.classList.remove('flame-animation');
                     inGameElement.style.display = 'none';
-                    updateElementWithAnimation(playerCard.querySelector('.rank'), data.rank);
                     updateElementWithAnimation(playerCard.querySelector('img'), data.image, 'src');
-                    updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `https://opgg-static.akamaized.net/images/medals_new/${data.tier.toLowerCase()}.png`, 'src');
-                    updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `${data.tier} Icon`, 'alt');
-                    updateElementWithAnimation(playerCard.querySelector('.tier-icon').nextElementSibling, `${data.tier} ${data.division} - ${data.lp} LP`);
-                    updateElementWithAnimation(playerCard.querySelector('.text-gray-400'), `Victoires : ${data.win} | Défaites : ${data.lose}`);
+                    if (data.tier.toLowerCase() !== 'unranked') {
+                        updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `https://opgg-static.akamaized.net/images/medals_new/${data.tier.toLowerCase()}.png`, 'src');
+                        updateElementWithAnimation(playerCard.querySelector('.tier-icon'), `${data.tier} Icon`, 'alt');
+                        updateElementWithAnimation(playerCard.querySelector('.tier-icon').nextElementSibling, `${data.tier} ${data.division} - ${data.lp} LP`);
+                        updateElementWithAnimation(playerCard.querySelector('.text-gray-400'), `Victoires : ${data.win} | Défaites : ${data.lose}`);
 
-                    const lastMatchesContainer = playerCard.querySelector('.flex.items-center.mb-2');
-                    lastMatchesContainer.innerHTML = '';
-                    const lastMatch = data.last_matches[0];
-                    const matchDiv = document.createElement('div');
-                    matchDiv.classList.add('relative', 'w-8', 'h-8', 'mr-2');
-                    matchDiv.innerHTML = `
-                        <img src="${lastMatch.champion_image}" alt="Champion Image" class="w-8 h-8 rounded">
-                        <div class="absolute inset-0 flex items-center justify-center ${lastMatch.result == 'win' ? 'bg-blue-500' : 'bg-red-500'} opacity-40 match-result"></div>
-                    `;
-                    lastMatchesContainer.appendChild(matchDiv);
-                    matchDiv.classList.add('update-animation');
-                    setTimeout(() => matchDiv.classList.remove('update-animation'), 1000);
+                        const lastMatchesContainer = playerCard.children[1].querySelector('#last-matches-' + data.name);
+                        lastMatchesContainer.innerHTML = '';
+                        for (let i = 0; i < data.last_matches.length; i++) {
+                            const lastMatch = data.last_matches[i];
+                            const matchDiv = document.createElement('div');
+                            matchDiv.classList.add('relative', 'w-8', 'h-8', 'mr-2');
+                            matchDiv.innerHTML = `
+                                <img src="${lastMatch.champion_image}" alt="Champion Image" class="w-8 h-8 rounded">
+                                <div class="absolute inset-0 flex items-center justify-center ${lastMatch.result == 'win' ? 'bg-blue-500' : 'bg-red-500'} opacity-40 match-result"></div>
+                            `;
+                            lastMatchesContainer.appendChild(matchDiv);
+                            matchDiv.classList.add('update-animation');
+                            setTimeout(() => matchDiv.classList.remove('update-animation'), 1000);
+                        }
+                    }
                 }
             }
         });
 
+        // Exemple de données de test
+        const testData = {
+            name: 'Cuillères',
+            in_game: true,
+            rank: 'Gold IV',
+            image: 'https://ddragon.leagueoflegends.com/cdn/14.20.1/img/profileicon/29.png',
+            tier: 'Gold',
+            division: 'IV',
+            lp: 50,
+            win: 10,
+            lose: 5,
+            last_matches: [
+                {
+                    champion_image: 'https://ddragon.leagueoflegends.com/cdn/14.20.1/img/champion/Volibear.png',
+                    result: 'win'
+                }
+            ]
+        };
+
         function getTimeDifference(updateTime) {
             const now = new Date();
-            const updateDate = new Date(updateTime);
+            const [day, month, year, hours, minutes, seconds] = updateTime.match(/\d+/g).map(Number);
+            const updateDate = new Date(year, month - 1, day, hours, minutes, seconds);
             const diffMs = now - updateDate;
             const diffSecs = Math.floor(diffMs / 1000);
             const diffMins = Math.floor(diffSecs / 60);
@@ -246,7 +269,7 @@
         function startUpdatingTimeDifference(updateTime) {
             setInterval(() => {
                 const timeDifference = getTimeDifference(updateTime);
-                updateElementWithAnimation(document.querySelector('h2'), `Dernière mise à jour : ${timeDifference}`);
+                updateElementWithAnimation(document.querySelector('h2'), `Dernière mise à jour : il y a ${timeDifference}`);
             }, 1000);
         }
 
