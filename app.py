@@ -70,6 +70,7 @@ def update_summoners_info():
 
     updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
     print(f'[{updated_at}] Updated summoners info')
+    socketio.emit('update_time', {'updated_at': updated_at})
 
 @app.route('/')
 def index():

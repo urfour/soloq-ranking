@@ -219,8 +219,12 @@
                     lastMatchesContainer.appendChild(matchDiv);
                     matchDiv.classList.add('update-animation');
                     setTimeout(() => matchDiv.classList.remove('update-animation'), 1000);
-                    }
+                }
             }
+        });
+
+        socket.on('update_time', function(data) {
+            updateElementWithAnimation(document.querySelector('h2'), data.updated_at);
         });
 
         function updateElementWithAnimation(element, newValue, attribute = 'textContent') {
