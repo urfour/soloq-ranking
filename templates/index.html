@@ -223,8 +223,35 @@
             }
         });
 
+        function getTimeDifference(updateTime) {
+            const now = new Date();
+            const updateDate = new Date(updateTime);
+            const diffMs = now - updateDate;
+            const diffSecs = Math.floor(diffMs / 1000);
+            const diffMins = Math.floor(diffSecs / 60);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffDays > 0) {
+                return `${diffDays} jours`;
+            } else if (diffHours > 0) {
+                return `${diffHours} heures`;
+            } else if (diffMins > 0) {
+                return `${diffMins} minutes`;
+            } else {
+                return `${diffSecs} secondes`;
+            }
+        }
+
+        function startUpdatingTimeDifference(updateTime) {
+            setInterval(() => {
+                const timeDifference = getTimeDifference(updateTime);
+                updateElementWithAnimation(document.querySelector('h2'), `Dernière mise à jour : ${timeDifference}`);
+            }, 1000);
+        }
+
         socket.on('update_time', function(data) {
-            updateElementWithAnimation(document.querySelector('h2'), data.updated_at);
+            startUpdatingTimeDifference(data.updated_at);
         });
 
         function updateElementWithAnimation(element, newValue, attribute = 'textContent') {
