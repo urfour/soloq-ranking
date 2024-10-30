@@ -74,7 +74,17 @@ def update_summoners_info():
 
 @app.route('/')
 def index():
-    return render_template('index.html', infos=summoners_infos, updated_at=updated_at)
+    tz = timezone('Europe/Paris')
+    updated_at_with_tz = tz.localize(datetime.strptime(updated_at, "%d/%m/%Y %H:%M:%S"))
+    current_time_with_tz = datetime.now(tz)
+    time_difference = timeago.format(updated_at_with_tz, current_time_with_tz, 'fr')
+    
+    return render_template(
+        'index.html', 
+        infos=summoners_infos, 
+        updated_at=updated_at, 
+        timeago=time_difference
+    )
 
 @app.route('/refresh', methods=['POST'])
 def refresh():

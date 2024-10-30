@@ -9,7 +9,7 @@
 <body class="bg-gray-900 text-white" background="{{ url_for('static', filename='background.png')}}">
     <div class="container mx-auto py-8">
         <h1 class="text-3xl font-bold text-center mb-6">Classement Solo Queue Challenge</h1>
-        <h2 class="mt-4 text-center text-gray-400">Dernière mise à jour : {{ updated_at }}</h3>
+        <h2 class="mt-4 text-center text-gray-400">Dernière mise à jour : {{ timeago }}</h3>
         <div class="flex justify-center mb-4 mt-4">
             <button id="refresh-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Rafraîchir</button>
             <button id="notification-button" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">
@@ -86,7 +86,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
+        let intervalId;
         document.addEventListener('DOMContentLoaded', function() {
+            startUpdatingTimeDifference('{{ updated_at }}');
+
             const notificationButton = document.getElementById('notification-button');
             if (Notification.permission === 'granted') {
                 notificationButton.hidden = true;
@@ -248,7 +251,10 @@
         }
 
         function startUpdatingTimeDifference(updateTime) {
-            setInterval(() => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+            intervalId = setInterval(() => {
                 const timeDifference = getTimeDifference(updateTime);
                 updateElementWithAnimation(document.querySelector('h2'), `Dernière mise à jour : il y a ${timeDifference}`);
             }, 1000);
