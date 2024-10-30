@@ -74,10 +74,7 @@ def update_summoners_info():
 
 @app.route('/')
 def index():
-    current_time = datetime.now()
-    last_updated_time = datetime.strptime(updated_at, "%d/%m/%Y %H:%M:%S")
-    time_difference = timeago.format(last_updated_time, current_time, 'fr')
-    return render_template('index.html', infos=summoners_infos, updated_at=time_difference)
+    return render_template('index.html', infos=summoners_infos, updated_at=updated_at)
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
