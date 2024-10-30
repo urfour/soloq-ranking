@@ -10,6 +10,7 @@ from summoners import get_all_summoners
 import time
 from datetime import datetime, timedelta
 import timeago
+from pytz import timezone
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='gevent')
@@ -26,7 +27,7 @@ REAL_SUMMONERS = {
     'Dreamer': 'EmpereurDesZebis#SCUL'
 }
 
-updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
+updated_at = datetime.now(timezone('Europe/Paris')).strftime("%d/%m/%Y %H:%M:%S")
 summoners_infos = []
 online_statuses = {}
 old_online_statuses = {}
@@ -68,7 +69,7 @@ def update_summoners_info():
 
     old_online_statuses = online_statuses.copy()
 
-    updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
+    updated_at = datetime.now(timezone('Europe/Paris')).strftime("%d/%m/%Y %H:%M:%S")
     print(f'[{updated_at}] Updated summoners info')
     socketio.emit('update_time', {'updated_at': updated_at})
 
