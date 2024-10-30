@@ -95,12 +95,11 @@ def get_all_summoners(summoners : dict):
             summoner_infos['most_played_champ'] = {}
             summoner_infos['last_matches'] = []
             summoner_infos['in_game'] = False
-        if not summoner.champion_masteries[0]:
-            break
-        champ: ChampionMastery
-        champ = summoner.champion_masteries[0]
-        summoner_infos['most_played_champ'] = {}
-        summoner_infos['most_played_champ']['name'] = champ.champion().name
-        summoner_infos['most_played_champ']['image'] = champ.champion().image().url
+        if summoner.champion_masteries and summoner.champion_masteries[0]:
+            champ: ChampionMastery
+            champ = summoner.champion_masteries[0]
+            summoner_infos['most_played_champ'] = {}
+            summoner_infos['most_played_champ']['name'] = champ.champion().name
+            summoner_infos['most_played_champ']['image'] = champ.champion().image().url
         all_summoners_infos.append(summoner_infos)
     return all_summoners_infos

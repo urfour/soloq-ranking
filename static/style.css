@@ -102,3 +102,13 @@ li:hover .match-result {
     animation: flame 1s infinite;
     border-radius: 10px;
 }
+
+/* Animation pour les mises à jour */
+.update-animation {
+    animation: highlight 1s ease-in-out;
+}
+
+@keyframes highlight {
+    0% { background-color: yellow; }
+    100% { background-color: transparent; }
+}
