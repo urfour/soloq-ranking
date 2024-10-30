@@ -7,7 +7,6 @@ from os import getenv
 from dotenv import load_dotenv
 import cassiopeia as cass
 from summoners import get_all_summoners
-import time
 from datetime import datetime, timedelta
 import timeago
 from pytz import timezone
