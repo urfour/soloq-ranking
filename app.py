@@ -40,7 +40,7 @@ def rank_to_value(tier, division, lp):
 
 def background_task():
     while True:
-        socketio.sleep(180)
+        socketio.sleep(240)
         update_summoners_info()
 
 def update_summoners_info():
