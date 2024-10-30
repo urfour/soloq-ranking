@@ -14,7 +14,7 @@ Ce projet est une application web Flask qui affiche le classement des invocateur
 ## Prérequis
 
 - Python 3.x
-- pip (Python package installer)
+- pip
 
 ## Installation
 
