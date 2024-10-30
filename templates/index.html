@@ -226,25 +226,6 @@
             }
         });
 
-        // Exemple de données de test
-        const testData = {
-            name: 'Cuillères',
-            in_game: true,
-            rank: 'Gold IV',
-            image: 'https://ddragon.leagueoflegends.com/cdn/14.20.1/img/profileicon/29.png',
-            tier: 'Gold',
-            division: 'IV',
-            lp: 50,
-            win: 10,
-            lose: 5,
-            last_matches: [
-                {
-                    champion_image: 'https://ddragon.leagueoflegends.com/cdn/14.20.1/img/champion/Volibear.png',
-                    result: 'win'
-                }
-            ]
-        };
-
         function getTimeDifference(updateTime) {
             const now = new Date();
             const [day, month, year, hours, minutes, seconds] = updateTime.match(/\d+/g).map(Number);
