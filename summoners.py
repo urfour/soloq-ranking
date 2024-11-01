@@ -95,6 +95,8 @@ def get_all_summoners(summoners : dict):
             summoner_infos['most_played_champ'] = {}
             summoner_infos['last_matches'] = []
             summoner_infos['in_game'] = False
+        except SearchError:
+            raise ValueError('No ranked solo queue found for this summoner.')
         if summoner.champion_masteries and summoner.champion_masteries[0]:
             champ: ChampionMastery
             champ = summoner.champion_masteries[0]

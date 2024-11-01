@@ -88,8 +88,11 @@ def index():
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
-    update_summoners_info()
-    return jsonify({'status': 'success', 'updated_at': updated_at})
+    try:
+        update_summoners_info()
+        return jsonify({'status': 'success', 'updated_at': updated_at})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
 
 def init_app():
     load_dotenv()
