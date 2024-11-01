@@ -5,3 +5,4 @@ python-dotenv==1.0.0
 timeago==1.0.16
 flask_socketio
 gevent==24.10.2
+pytz==2024.2

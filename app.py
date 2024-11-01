@@ -7,9 +7,9 @@ from os import getenv
 from dotenv import load_dotenv
 import cassiopeia as cass
 from summoners import get_all_summoners
-import time
 from datetime import datetime, timedelta
 import timeago
+from pytz import timezone
 
 app = Flask(__name__)
 socketio = SocketIO(app, async_mode='gevent')
@@ -26,7 +26,7 @@ REAL_SUMMONERS = {
     'Dreamer': 'EmpereurDesZebis#SCUL'
 }
 
-updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
+updated_at = datetime.now(timezone('Europe/Paris')).strftime("%d/%m/%Y %H:%M:%S")
 summoners_infos = []
 online_statuses = {}
 old_online_statuses = {}
@@ -40,7 +40,7 @@ def rank_to_value(tier, division, lp):
 
 def background_task():
     while True:
-        socketio.sleep(180)
+        socketio.sleep(240)
         update_summoners_info()
 
 def update_summoners_info():
@@ -68,16 +68,23 @@ def update_summoners_info():
 
     old_online_statuses = online_statuses.copy()
 
-    updated_at = time.strftime("%d/%m/%Y %H:%M:%S")
+    updated_at = datetime.now(timezone('Europe/Paris')).strftime("%d/%m/%Y %H:%M:%S")
     print(f'[{updated_at}] Updated summoners info')
     socketio.emit('update_time', {'updated_at': updated_at})
 
 @app.route('/')
 def index():
-    current_time = datetime.now()
-    last_updated_time = datetime.strptime(updated_at, "%d/%m/%Y %H:%M:%S")
-    time_difference = timeago.format(last_updated_time, current_time, 'fr')
-    return render_template('index.html', infos=summoners_infos, updated_at=time_difference)
+    tz = timezone('Europe/Paris')
+    updated_at_with_tz = tz.localize(datetime.strptime(updated_at, "%d/%m/%Y %H:%M:%S"))
+    current_time_with_tz = datetime.now(tz)
+    time_difference = timeago.format(updated_at_with_tz, current_time_with_tz, 'fr')
+    
+    return render_template(
+        'index.html', 
+        infos=summoners_infos, 
+        updated_at=updated_at, 
+        timeago=time_difference
+    )
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
