@@ -92,8 +92,8 @@ def init_app():
         'pipeline': {
             "Cache": {
                 "expirations": {
-                    "LeagueSummonerEntries": timedelta(minutes=3),
-                    'Match': timedelta(minutes=3),
+                    "LeagueSummonerEntries": timedelta(seconds=30),
+                    'Match': timedelta(minutes=5),
                     'CurrentMatch': timedelta(seconds=30),
                 }
             }, 
